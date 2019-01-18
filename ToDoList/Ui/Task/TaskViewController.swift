@@ -8,12 +8,8 @@
 
 import UIKit
 import MBProgressHUD
-import TTGSnackbar
 
-class TaskViewController: UIBaseViewController {
-    fileprivate var presenter: TaskViewPresenter?
-    fileprivate var snackbar: TTGSnackbar?
-    
+class TaskViewController: UIBaseViewController<TaskViewPresenter> {
     @IBOutlet weak var tfTitle: UITextField!
     @IBOutlet weak var tvDetail: UITextView!
     
@@ -25,8 +21,11 @@ class TaskViewController: UIBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter = TaskViewPresenter(view: self)
         prepareUI()
+    }
+    
+    override func createPresenter() -> TaskViewPresenter {
+        return TaskViewPresenter(view: self)
     }
     
     func goToMain() {

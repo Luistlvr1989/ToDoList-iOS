@@ -11,21 +11,30 @@ import UIKit
 import MBProgressHUD
 import TTGSnackbar
 
-class UIBaseViewController: UIViewController {
-    fileprivate var snackbar: TTGSnackbar?
+class UIBaseViewController<T>: UIViewController, BaseView {
+    fileprivate var snackbar = TTGSnackbar(message: "", duration: .long)
     
-    func showProgressHUD() {
+    var presenter: T?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presenter = createPresenter()
+    }
+    
+    func createPresenter() -> T {
+        preconditionFailure("This method must be overridden")
+    }
+    
+    func showProgress() {
         MBProgressHUD.showAdded(to: self.view, animated: true)
     }
     
-    func hideProgressHUD() {
+    func hideProgress() {
         MBProgressHUD.hide(for: self.view, animated: true)
     }
     
     func showError(message: String) {
-        if let snackbar = snackbar {
-            snackbar.message = message
-            snackbar.show()
-        }
+        snackbar.message = message
+        snackbar.show()
     }
 }

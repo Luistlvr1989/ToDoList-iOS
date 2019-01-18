@@ -7,26 +7,25 @@
 //
 
 import UIKit
-import TTGSnackbar
 import MBProgressHUD
 
-class TableViewController: UIBaseViewController, UITableViewDelegate, UITableViewDataSource {
-    fileprivate var presenter: TableViewPresenter?
-    fileprivate var snackbar: TTGSnackbar?
-    
+class TableViewController: UIBaseViewController<TableViewPresenter>, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tTasks: UITableView!
     
     var tasks:[TaskDto] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter = TableViewPresenter(view: self)
         prepareUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         presenter?.prepareData()
+    }
+    
+    override func createPresenter() -> TableViewPresenter {
+        return TableViewPresenter(view: self)
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {

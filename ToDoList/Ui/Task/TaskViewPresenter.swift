@@ -16,13 +16,13 @@ class TaskViewPresenter {
     }
     
     func saveTask(taskDto: TaskDto) {
-        self.view?.showProgressHUD()
+        self.view?.showProgress()
         if taskDto.id == nil {
-            ApiClient.shared.addTask(taskDto: taskDto) { result in
+            AddTask(taskDto: taskDto).execute() { result in
                 self.handleResponse(result: result)
             }
         } else {
-            ApiClient.shared.updateTask(taskDto: taskDto) { result in
+            UpdateTask(taskDto: taskDto).execute() { result in
                 self.handleResponse(result: result)
             }
         }
@@ -31,12 +31,12 @@ class TaskViewPresenter {
     fileprivate func handleResponse(result: ApiResult<Void>) {
         switch result {
         case .success:
-            self.view?.hideProgressHUD()
+            self.view?.hideProgress()
             self.view?.goToMain()
             break
             
         case .failure(let error):
-            self.view?.hideProgressHUD()
+            self.view?.hideProgress()
             self.view?.showError(message: error.userMessage())
             break
         }
